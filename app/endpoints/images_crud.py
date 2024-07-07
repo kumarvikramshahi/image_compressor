@@ -1,16 +1,23 @@
-from fastapi import APIRouter
+import csv
+import uuid
+from fastapi import APIRouter, UploadFile, File
+from typing import Annotated
+from io import StringIO
 from schema.schema import (
-    UploadImagesRequest,
     ImageProcessingStatusRequest,
     GenericResponse,
 )
+
 
 Router = APIRouter()
 
 
 @Router.post("/upload_images", response_model=GenericResponse)
-async def UploadImages(reqItem: UploadImagesRequest):
-    csvFile = await reqItem.CsvFile.read()
+async def UploadImages(csv_file: Annotated[UploadFile, File()]):
+    csvFile = await csv_file.read()
+    csvStringData = str(csvFile, "utf-8")
+    csvData = csv.reader(StringIO(csvStringData))
+    print(list(csvData))
     return GenericResponse(data={"message": "file uploaded successfully"})
 
 

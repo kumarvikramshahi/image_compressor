@@ -4,7 +4,7 @@ from fastapi import UploadFile, File
 
 
 class UploadImagesRequest(BaseModel):
-    CsvFile: Annotated[UploadFile, File()] = Field(alias="csv_file")
+    pass
 
 
 class UploadImagesCsvFileDataFormat(BaseModel):

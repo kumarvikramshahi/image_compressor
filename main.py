@@ -1,7 +1,18 @@
-from fastapi import FastAPI
+import uuid
+from fastapi import FastAPI, Request
 from app.routes import BasicRouters
 
 app = FastAPI()
+
+
+@app.middleware("http")
+async def unauthMiddleware(request: Request, callNext):
+    requestId = str(uuid.uuid4())
+    headers = {"requestId": requestId}
+    request.state.headers = headers
+    response = callNext(request)
+    return response
+
 
 app.include_router(BasicRouters)
 
