@@ -1,8 +1,10 @@
 import uuid
 from fastapi import FastAPI, Request
 from app.routes import BasicRouters
+from core import MongoConnection
 
 app = FastAPI()
+MongoConnection.Create()
 
 
 @app.middleware("http")

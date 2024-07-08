@@ -5,7 +5,7 @@ from config.settings import ConfigSettings
 
 
 class MongoDbConnection:
-    VectorDb: AsyncIOMotorDatabase
+    ProductDB: AsyncIOMotorDatabase
     Client: AsyncIOMotorClient
 
     def __init__(self) -> None:
@@ -13,8 +13,10 @@ class MongoDbConnection:
 
     def Create(self) -> None:
         mongoUri = f"mongodb+srv://{ConfigSettings.MONGODB_USER}:{ConfigSettings.MONGODB_PASSWORD}@{ConfigSettings.MONGODB_HOST}/"
-        self.client = AsyncIOMotorClient(mongoUri)
-        self.vectorDb = self.client[ConfigSettings.MONGODB_NAME]
+        if ConfigSettings.ENV_NAME == "dev":
+            mongoUri = f"mongodb://{ConfigSettings.MONGODB_HOST}"
+        self.Client = AsyncIOMotorClient(mongoUri)
+        self.ProductDB = self.client[ConfigSettings.MONGODB_NAME]
         logging.info("Connected to the MongoDB database!")
 
     def Close(self) -> None:
